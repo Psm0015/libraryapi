@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: libraryapi
+  datasource:
+    url: jdbc:postgresql://localhost:5434/library
+    user: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update #none, create-drop
+    properties:
+      hibernate.format_sql: true
