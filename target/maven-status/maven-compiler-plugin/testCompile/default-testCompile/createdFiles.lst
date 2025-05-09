@@ -1,1 +1,4 @@
+io\github\psm0015\libraryapi\repository\LivroRepositoryTest.class
 io\github\psm0015\libraryapi\LibraryapiApplicationTests.class
+io\github\psm0015\libraryapi\repository\TransacaoTest.class
+io\github\psm0015\libraryapi\repository\AutorRepositoryTest.class
