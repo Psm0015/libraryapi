@@ -1,21 +1,22 @@
 package io.github.psm0015.libraryapi.controller;
 
-import io.github.psm0015.libraryapi.dtos.AutorDTO;
-import io.github.psm0015.libraryapi.dtos.ErroResposta;
-import io.github.psm0015.libraryapi.exceptions.OperacaoNaoPermitidaExeption;
-import io.github.psm0015.libraryapi.exceptions.RegistroDuplicadoException;
-import io.github.psm0015.libraryapi.model.Autor;
-import io.github.psm0015.libraryapi.service.AutorService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.Optional;
+import jakarta.validation.Valid;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import io.github.psm0015.libraryapi.model.Autor;
+import org.springframework.web.bind.annotation.*;
+import io.github.psm0015.libraryapi.dtos.AutorDTO;
+import io.github.psm0015.libraryapi.dtos.ErroResposta;
+import io.github.psm0015.libraryapi.service.AutorService;
+import io.github.psm0015.libraryapi.exceptions.RegistroDuplicadoException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import io.github.psm0015.libraryapi.exceptions.OperacaoNaoPermitidaExeption;
+
 
 @RestController
 @RequestMapping("autores")
@@ -41,7 +42,7 @@ public class AutorController {
 
 
     @PostMapping
-    public ResponseEntity<Object> salvar(@RequestBody AutorDTO autor){
+    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO autor){
         try{
             Autor autorEntity = autor.convertAutor();
             autorService.salvar(autorEntity);
@@ -76,7 +77,7 @@ public class AutorController {
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "nacionalidade", required = false) String nacionalidade){
         return ResponseEntity.ok(
-                autorService.pesquisar(nome, nacionalidade)
+                autorService.pesquisaByExample(nome, nacionalidade)
                         .stream()
                         .map(autor -> new AutorDTO(
                 autor.getId(),
@@ -87,7 +88,7 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody AutorDTO dto){
+    public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody @Valid AutorDTO dto){
         try {
             Optional<Autor> autorOptional = autorService.obterPorId(UUID.fromString(id));
 
