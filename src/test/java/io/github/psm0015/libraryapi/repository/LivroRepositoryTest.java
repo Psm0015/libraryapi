@@ -10,8 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 class LivroRepositoryTest {
@@ -91,12 +94,6 @@ class LivroRepositoryTest {
     }
 
     @Test
-    void pesquisaPorISBNTest(){
-        List<Livro> livros = repository.findByIsbn("15935-54562");
-        livros.forEach(System.out::println);
-    }
-
-    @Test
     void pesquisaPorTituloEPreco(){
         List<Livro> livros = repository.findByTituloAndPreco(
                 "Eu sei Lá 2",
@@ -149,7 +146,51 @@ class LivroRepositoryTest {
         repository.updateDataPublicacao(UUID.fromString("7c926da7-e566-4502-b96f-b412b4f21b53"), LocalDate.of(2000, 5, 13));
     }
 
+    @Test
+    void carregarLivros(){
+        List<Autor> autores = autorRepository.findAll();
+        List<Livro> livros = new ArrayList<>();
 
+        for (int i = 0; i < 50; i++) {
+            List<GeneroLivro> generos = List.of(GeneroLivro.values());
+            Livro livro = new Livro();
+
+            //GERAR ISBN
+            String isbnSemDigito = "978";
+
+            for (int c = 0; c < 9; c++) {
+                isbnSemDigito += (int) (Math.random() * 10);
+            }
+
+            int soma = 0;
+
+            for (int dv = 0; dv < isbnSemDigito.length(); dv++) {
+                int digito = Character.getNumericValue(isbnSemDigito.charAt(dv));
+                soma += (dv % 2 == 0) ? digito : digito * 3;
+            }
+
+            int resto = soma % 10;
+            //GERAR ISBN FIM//
+
+            //GERAR DATA//
+            ThreadLocalRandom random = ThreadLocalRandom.current();
+            int ano = random.nextInt(1950, 2005);
+            int mes = random.nextInt(1, 13);
+            int dia = random.nextInt(1, 29);
+
+
+            livro.setIsbn(isbnSemDigito + ((resto == 0) ? 0 : 10 - resto));
+            livro.setTitulo(UUID.randomUUID().toString().substring(0, 8) + " " + UUID.randomUUID().toString().substring(0, 8));
+            livro.setDataPublicacao(LocalDate.of(ano, mes, dia));
+            livro.setGenero(generos.get(random.nextInt(generos.size())));
+            livro.setPreco(BigDecimal.valueOf(random.nextInt(10,200)));
+            livro.setAutor(autores.get(random.nextInt(autores.size())));
+            livros.add(livro);
+        }
+
+        repository.saveAll(livros);
+
+    }
 
 
 }

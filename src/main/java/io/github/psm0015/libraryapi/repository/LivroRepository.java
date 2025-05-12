@@ -3,27 +3,25 @@ package io.github.psm0015.libraryapi.repository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import io.github.psm0015.libraryapi.model.Autor;
 import io.github.psm0015.libraryapi.model.GeneroLivro;
 import io.github.psm0015.libraryapi.model.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * @see LivroRepositoryTest
- */
-
-public interface LivroRepository extends JpaRepository<Livro, UUID> {
+public interface LivroRepository extends JpaRepository<Livro, UUID>, JpaSpecificationExecutor<Livro> {
     //Query Method
     List<Livro> findByAutor(Autor autor);
     List<Livro> findByTitulo(String titulo);
     List<Livro> findByTituloContaining(String titulo);
-    List<Livro> findByIsbn(String isbn);
+    Optional<Livro> findByIsbn(String isbn);
     List<Livro> findByTituloAndPreco(String titulo, BigDecimal preco);
     //
     @Query("select l from Livro as l order by l.titulo")
@@ -64,5 +62,7 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
     void updateDataPublicacao(UUID uuid, LocalDate dataPublicacao);
 
     boolean existsByAutor(Autor autor);
+
+
 
 }
