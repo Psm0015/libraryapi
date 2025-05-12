@@ -1,6 +1,5 @@
 package io.github.psm0015.libraryapi.dtos;
 
-import io.github.psm0015.libraryapi.model.Autor;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -20,11 +19,4 @@ public record AutorDTO(
         @NotBlank(message = "Campo obrigatório")
         @Size(max = 50, min = 2, message = "O campo tem q ter pelomenos 2 caracteres e no máximo 50")
         String nacionalidade) {
-    public Autor convertAutor(){
-        Autor autor = new Autor();
-        autor.setNome(this.nome);
-        autor.setDataNascimento(this.dataNascimento);
-        autor.setNacionalidade(this.nacionalidade);
-        return autor;
-    }
 }
