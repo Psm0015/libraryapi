@@ -2,8 +2,10 @@ package io.github.psm0015.libraryapi.service;
 
 import io.github.psm0015.libraryapi.exceptions.OperacaoNaoPermitidaExeption;
 import io.github.psm0015.libraryapi.model.Autor;
+import io.github.psm0015.libraryapi.model.Usuario;
 import io.github.psm0015.libraryapi.repository.AutorRepository;
 import io.github.psm0015.libraryapi.repository.LivroRepository;
+import io.github.psm0015.libraryapi.security.SecurityService;
 import io.github.psm0015.libraryapi.validator.AutorValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -21,10 +23,12 @@ public class AutorService {
     private final AutorRepository autorRepository;
     private final AutorValidator validator;
     private final LivroRepository livroRepository;
-
+    private final SecurityService securityService;
 
     public Autor salvar(Autor autor){
         validator.validar(autor);
+        Usuario usuario = securityService.obterUsuarioLogado();
+        autor.setUsuario(usuario);
         return autorRepository.save(autor);
     }
     public void atualizar(Autor autor){

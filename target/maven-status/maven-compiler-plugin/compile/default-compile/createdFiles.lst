@@ -3,6 +3,7 @@ io\github\psm0015\libraryapi\model\Livro.class
 io\github\psm0015\libraryapi\repository\AutorRepository.class
 io\github\psm0015\libraryapi\controller\GenericController.class
 io\github\psm0015\libraryapi\mappers\AutorMapperImpl.class
+io\github\psm0015\libraryapi\controller\LoginViewController.class
 io\github\psm0015\libraryapi\config\DatabaseConfiguration.class
 io\github\psm0015\libraryapi\repository\specs\LivroSpecs.class
 io\github\psm0015\libraryapi\LibraryapiApplication.class
@@ -10,6 +11,7 @@ io\github\psm0015\libraryapi\repository\LivroRepository.class
 io\github\psm0015\libraryapi\dtos\ErroCampo.class
 io\github\psm0015\libraryapi\exceptions\CampoInvalidoException.class
 io\github\psm0015\libraryapi\service\AutorService.class
+io\github\psm0015\libraryapi\config\SecurityConfiguration.class
 io\github\psm0015\libraryapi\dtos\CadastroLivroDTO.class
 io\github\psm0015\libraryapi\exceptions\RegistroDuplicadoException.class
 io\github\psm0015\libraryapi\model\Autor.class
@@ -25,5 +27,7 @@ io\github\psm0015\libraryapi\dtos\AutorDTO.class
 io\github\psm0015\libraryapi\service\TransacaoService.class
 io\github\psm0015\libraryapi\mappers\AutorMapper.class
 io\github\psm0015\libraryapi\controller\AutorController.class
+io\github\psm0015\libraryapi\model\Usuario.class
+io\github\psm0015\libraryapi\config\WebConfiguration.class
 io\github\psm0015\libraryapi\validator\AutorValidator.class
 io\github\psm0015\libraryapi\dtos\ResultadoPesquisaLivroDTO.class

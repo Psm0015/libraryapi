@@ -2,7 +2,9 @@ package io.github.psm0015.libraryapi.service;
 
 import io.github.psm0015.libraryapi.model.GeneroLivro;
 import io.github.psm0015.libraryapi.model.Livro;
+import io.github.psm0015.libraryapi.model.Usuario;
 import io.github.psm0015.libraryapi.repository.LivroRepository;
+import io.github.psm0015.libraryapi.security.SecurityService;
 import io.github.psm0015.libraryapi.validator.LivroValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,9 +25,12 @@ public class LivroService {
 
     private final LivroRepository livroRepository;
     private final LivroValidator livroValidator;
+    private final SecurityService securityService;
 
     public Livro salvar(Livro livro) {
         livroValidator.validar(livro);
+        Usuario usuario = securityService.obterUsuarioLogado();
+        livro.setUsuario(usuario);
         return livroRepository.save(livro);
     }
 
