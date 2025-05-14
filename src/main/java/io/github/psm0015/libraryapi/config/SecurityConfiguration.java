@@ -9,6 +9,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,27 +38,32 @@ public class SecurityConfiguration {
                 .build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(10);
-    }
-
-    @Bean
-    public UserDetailsService userDetalisService(UsuarioService uService){
-
-//        UserDetails user1 = User.builder()
-//                .username("usuario")
-//                .password(encoder.encode("123"))
-//                .roles("USER")
-//                .build();
-//        UserDetails user2 = User.builder()
-//                .username("admin")
-//                .password(encoder.encode("321"))
-//                .roles("ADMIN")
-//                .build();
+//    @Bean
+//    public PasswordEncoder passwordEncoder(){
+//        return new BCryptPasswordEncoder(10);
+//    }
 //
-//        return new InMemoryUserDetailsManager(user1,user2);
-        return new CustomUserDetailsService(uService);
+////    @Bean
+//    public UserDetailsService userDetalisService(UsuarioService uService){
+//
+////        UserDetails user1 = User.builder()
+////                .username("usuario")
+////                .password(encoder.encode("123"))
+////                .roles("USER")
+////                .build();
+////        UserDetails user2 = User.builder()
+////                .username("admin")
+////                .password(encoder.encode("321"))
+////                .roles("ADMIN")
+////                .build();
+////
+////        return new InMemoryUserDetailsManager(user1,user2);
+//        return new CustomUserDetailsService(uService);
+//    }
+
+    @Bean
+    public GrantedAuthorityDefaults grantedAuthorityDefaults(){
+        return new GrantedAuthorityDefaults("");
     }
 
 }
