@@ -5,6 +5,7 @@ import io.github.psm0015.libraryapi.dtos.ErroResposta;
 import io.github.psm0015.libraryapi.exceptions.CampoInvalidoException;
 import io.github.psm0015.libraryapi.exceptions.OperacaoNaoPermitidaExeption;
 import io.github.psm0015.libraryapi.exceptions.RegistroDuplicadoException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
@@ -18,11 +19,13 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+@Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErroResposta handleMetodArgumentNotValidException(MethodArgumentNotValidException e){
         List<FieldError> fieldErrors = e.getFieldErrors();
         List<ErroCampo> listaErros = fieldErrors.stream().map(fe -> new ErroCampo(fe.getField(), fe.getDefaultMessage())).collect(Collectors.toList());
+        log.error("Erro de validação {}",listaErros);
         return new ErroResposta(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação",listaErros);
     }
 
@@ -47,6 +50,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErroResposta handleErrosNaoTratados(RuntimeException e){
+        log.error("Erro inesperado", e);
         return new ErroResposta(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Ocorreu um erro inesperado. Caso repita, entre em contato com a administração.", List.of());
     }
     @ExceptionHandler(AccessDeniedException.class)

@@ -6,6 +6,7 @@ import io.github.psm0015.libraryapi.model.Autor;
 import io.github.psm0015.libraryapi.service.AutorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping("autores")
 @RequiredArgsConstructor
 @EnableMethodSecurity
+@Slf4j
 public class AutorController implements GenericController {
 
     private final AutorService autorService;
@@ -42,8 +44,10 @@ public class AutorController implements GenericController {
     @PostMapping
     @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDTO dto) {
-        Autor autor = autorMapper.toEntity(dto);
 
+        log.info("Cadastrando novo autor: {}", dto.nome());
+
+        Autor autor = autorMapper.toEntity(dto);
 
         autorService.salvar(autor);
 
@@ -55,6 +59,7 @@ public class AutorController implements GenericController {
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<?> deletar(@PathVariable("id") String id) {
+        log.info("Deletando autor de id: {}", id);
         Optional<Autor> autorOptional = autorService.obterPorId(UUID.fromString(id));
         if (autorOptional.isPresent()) {
             Autor autor = autorOptional.get();
@@ -69,6 +74,13 @@ public class AutorController implements GenericController {
     public ResponseEntity<List<AutorDTO>> pesquisar(
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "nacionalidade", required = false) String nacionalidade) {
+
+//        log.trace("Pesquisa autores trace");
+//        log.debug("Pesquisa autores debug");
+//        log.info("Pesquisa autores info");
+//        log.warn("Pesquisa autores warn");
+//        log.error("Pesquisa autores error");
+
         return ResponseEntity.ok(
                 autorService.pesquisaByExample(nome, nacionalidade)
                         .stream()
@@ -79,6 +91,7 @@ public class AutorController implements GenericController {
     @PutMapping("{id}")
     @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> atualizar(@PathVariable("id") String id, @RequestBody @Valid AutorDTO dto) {
+        log.info("Pesquisando autor de id: {}", id);
         Optional<Autor> autorOptional = autorService.obterPorId(UUID.fromString(id));
 
         if (autorOptional.isEmpty()) {
