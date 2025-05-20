@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +37,21 @@ public class SecurityConfiguration {
                 })
                 .build();
     }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return  web -> {
+            web.ignoring().requestMatchers(
+                    "/v2/api-docs/**",
+                    "/v3/api-docs/**",
+                    "/swagger-resources/**",
+                    "/swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/webjars/**"
+            );
+        };
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){
