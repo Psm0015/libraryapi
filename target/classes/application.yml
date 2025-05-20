@@ -1,14 +1,18 @@
 spring:
   application:
     name: libraryapi
+#  profiles:
+#    active: production
+
+#SPRING_PROFILES_ACTIVE=production
   output:
     ansi:
       enabled:
         ALWAYS
   datasource:
-    url: jdbc:postgresql://localhost:5434/library
-    user: postgres
-    password: postgres
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5434/library}
+    user: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
@@ -19,22 +23,33 @@ spring:
 logging:
   pattern:
     console: '%clr(%d{dd-MM-yyyy HH:mm:ss}){faint} %clr(%5p) %clr([%t]){faint} %clr(%-40.40logger){cyan} %clr(:){yellow} %m%n'
-  file:
-    name: app.log
+#  file:
+#    name: app.log
   level:
-    root: trace #trace, debug, info, warn, error
+    root: debug #trace, debug, info, warn, error
     io:
       github:
         psm0015:
-          controller: trace
+          controller: debug
     org:
       springframework:
-        web: trace
+        web: debug
 management:
   server:
     port: 9090
   endpoints:
     web:
       exposure:
-#        include: '*'
-        include: beans, logfile
+        include: '*'
+#        include: beans, logfile
+
+# production
+---
+spring:
+  config:
+    activate:
+      on-profile: production
+  jpa:
+    show-sql: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/library
